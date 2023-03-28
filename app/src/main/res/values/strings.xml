@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Lab5</string>
+    <string name="navigation_drawer_open">Open sesame!</string>
+    <string name="navigation_drawer_close">Close sesame!</string>
+</resources>
