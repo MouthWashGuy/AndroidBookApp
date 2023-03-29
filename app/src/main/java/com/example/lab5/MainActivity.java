@@ -75,6 +75,14 @@ public class MainActivity extends AppCompatActivity {
         // UI ELEMENTS                                                                           //
        ///////////////////////////////////////////////////////////////////////////////////////////
 
+        // initialize and bind all edit text objects
+        bookIDText = findViewById(R.id.editTextBookID);
+        titleText = findViewById(R.id.editTextTitle);
+        ISBNText = findViewById(R.id.editTextISBN);
+        authorText = findViewById(R.id.editTextAuthor);
+        descriptionText = findViewById(R.id.editTextDescription);
+        priceText = findViewById(R.id.editTextPrice);
+
         // initialize and bind the toolbar then set is as the action bar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -96,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
         listView.setAdapter(myAdapter); //
 
         // initialize and bind the drawer layout
-        DrawerLayout drawerLayout = findViewById(R.id.drawerLayout);
+        drawerLayout = findViewById(R.id.drawerLayout);
         // create the action bar toggle icon
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(drawerToggle);
@@ -158,6 +166,8 @@ public class MainActivity extends AppCompatActivity {
             clearFields();
         } else if (id == R.id.loadData) {
             loadBook();
+        } else if (id == R.id.totalBooks) {
+            totalBooks();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -174,14 +184,6 @@ public class MainActivity extends AppCompatActivity {
         String author;
         String description;
         double price;
-
-        // initialize and bind all edit text objects
-        EditText bookIDText = findViewById(R.id.editTextBookID);
-        EditText titleText = findViewById(R.id.editTextTitle);
-        EditText ISBNText = findViewById(R.id.editTextISBN);
-        EditText authorText = findViewById(R.id.editTextAuthor);
-        EditText descriptionText = findViewById(R.id.editTextDescription);
-        EditText priceText = findViewById(R.id.editTextPrice);
 
         // start by collecting all relevant book data from plain text fields
         bookId = bookIDText.getText().toString(); // set book id's value to the input text using get text, also type casts to string
@@ -216,15 +218,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void clearFields() { // simple method calling clear on the edit text objects text attribute
-
-        // initialize and bind all edit text objects
-        EditText bookIDText = findViewById(R.id.editTextBookID);
-        EditText titleText = findViewById(R.id.editTextTitle);
-        EditText ISBNText = findViewById(R.id.editTextISBN);
-        EditText authorText = findViewById(R.id.editTextAuthor);
-        EditText descriptionText = findViewById(R.id.editTextDescription);
-        EditText priceText = findViewById(R.id.editTextPrice);
-
         bookIDText.getText().clear();
         titleText.getText().clear();
         ISBNText.getText().clear();
@@ -234,15 +227,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadBook() {
-
-        // initialize and bind all edit text objects
-        EditText bookIDText = findViewById(R.id.editTextBookID);
-        EditText titleText = findViewById(R.id.editTextTitle);
-        EditText ISBNText = findViewById(R.id.editTextISBN);
-        EditText authorText = findViewById(R.id.editTextAuthor);
-        EditText descriptionText = findViewById(R.id.editTextDescription);
-        EditText priceText = findViewById(R.id.editTextPrice);
-
         // create shared pref
         SharedPreferences myBook = getSharedPreferences("book", 0);
 
@@ -265,6 +249,11 @@ public class MainActivity extends AppCompatActivity {
         myAdapter.notifyDataSetChanged();
     }
 
+    private void totalBooks() {
+        Toast myMessage = Toast.makeText(this, String.format("Total books is %s", myList.size()), Toast.LENGTH_LONG);
+        myMessage.show(); // actually displaying the message
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // BROADCAST RECEIVER                                                                        //
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -272,15 +261,6 @@ public class MainActivity extends AppCompatActivity {
     BroadcastReceiver myReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-
-            // initialize and bind all edit text objects
-            EditText bookIDText = findViewById(R.id.editTextBookID);
-            EditText titleText = findViewById(R.id.editTextTitle);
-            EditText ISBNText = findViewById(R.id.editTextISBN);
-            EditText authorText = findViewById(R.id.editTextAuthor);
-            EditText descriptionText = findViewById(R.id.editTextDescription);
-            EditText priceText = findViewById(R.id.editTextPrice);
-
             // now we get the book data string
             String bookData = intent.getStringExtra("bookData");
             Toast.makeText(context, bookData, Toast.LENGTH_LONG).show();
@@ -324,8 +304,9 @@ public class MainActivity extends AppCompatActivity {
                 removePrevious();
             } else if (id == R.id.removeAll) {
                 removeAll();
+            } else if (id == R.id.close) {
+                finish();
             }
-            DrawerLayout drawerLayout = findViewById(R.id.drawerLayout);
             drawerLayout.closeDrawers();
             return true;
         }

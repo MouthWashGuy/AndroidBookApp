@@ -10,4 +10,7 @@
     <item
         android:id="@+id/removeAll"
         android:title="Remove All" />
+    <item
+        android:id="@+id/close"
+        android:title="Close" />
 </menu>
