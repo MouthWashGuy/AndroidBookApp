@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.BroadcastReceiver;
@@ -35,9 +37,11 @@ public class MainActivity extends AppCompatActivity {
     // INSTANCE VARS                                                                             //
     //////////////////////////////////////////////////////////////////////////////////////////////
 
-    // listview related
+    // Recycle view related
     List<String> myList = new ArrayList<>();
-    ArrayAdapter myAdapter;
+    RecyclerView myRecyclerView;
+    RecyclerView.LayoutManager myLayoutManager;
+    RecyclerView.Adapter myAdapter;
 
     // edittext related
     EditText bookIDText;
@@ -97,11 +101,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // initialize and bind list view
-        ListView listView = findViewById(R.id.listView);
-        // use adapter to stream data from array to the listview
-        myAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, myList);
-        listView.setAdapter(myAdapter); //
+        // initialize and bind recycle view
+        myRecyclerView = findViewById(R.id.recycleView);
+        myLayoutManager = new LinearLayoutManager(this);
+        myRecyclerView.setLayoutManager(myLayoutManager);
+        myAdapter = new MyRecyclerViewAdapter(myList);
+        myRecyclerView.setAdapter(myAdapter);
 
         // initialize and bind the drawer layout
         drawerLayout = findViewById(R.id.drawerLayout);
@@ -213,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
         myEditor.apply(); // apply the changes
 
         // add the book to the listview
-        myList.add(String.format("%s | %.2f", title, price));
+        myList.add(String.format("ID: %s|Title: %s|ISBN: %d|Author: %s|DESC: %s|Price: %.2f", bookId, title, ISBN, author, description, price));
         myAdapter.notifyDataSetChanged();
     }
 
