@@ -1,12 +1,32 @@
-package com.example.lab5;
+package com.example.lab5.provider;
 
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "books")
 public class Book {
 
-    String title;
-    String ISBN;
-    String author;
-    String description;
-    String price;
+    @PrimaryKey(autoGenerate = true)
+    @NonNull
+    @ColumnInfo(name = "bookId")
+    private int bookId;
+
+    @ColumnInfo(name = "bookTitle")
+    private String title;
+
+    @ColumnInfo(name = "bookISBN")
+    private String ISBN;
+
+    @ColumnInfo(name = "bookAuthor")
+    private String author;
+
+    @ColumnInfo(name = "bookDescription")
+    private String description;
+
+    @ColumnInfo(name = "bookPrice")
+    private String price;
 
     public Book(String title, String ISBN, String author, String description, String price) {
         this.title = title;
@@ -14,6 +34,14 @@ public class Book {
         this.author = author;
         this.description = description;
         this.price = price;
+    }
+
+    public int getBookId() {
+        return bookId;
+    }
+
+    public void setBookId(@NonNull int bookId) {
+        this.bookId = bookId;
     }
 
     public String getTitle() {

@@ -8,17 +8,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.lab5.provider.Book;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.ViewHolder> {
 
-    private List<Book> myList;
+    private List<Book> myList = new ArrayList<>();
 
-    public MyRecyclerViewAdapter(List<Book> data) {
-        myList = data;
+    public MyRecyclerViewAdapter() {
     }
 
     @NonNull
@@ -73,5 +73,9 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             descriptionView = itemView.findViewById(R.id.descriptionCardText);
             priceView = itemView.findViewById(R.id.priceCardText);
         }
+    }
+
+    public void setMyList(List<Book> myList) {
+        this.myList = myList;
     }
 }

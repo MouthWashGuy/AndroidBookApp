@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,6 +23,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.lab5.provider.Book;
+import com.example.lab5.provider.BookViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
@@ -35,11 +38,13 @@ public class MainActivity extends AppCompatActivity {
     // INSTANCE VARS                                                                             //
     //////////////////////////////////////////////////////////////////////////////////////////////
 
+    // DB related
+    private BookViewModel mBookViewModel;
+
     // Recycle view related
-    List<Book> myList = new ArrayList<>();
     RecyclerView myRecyclerView;
     RecyclerView.LayoutManager myLayoutManager;
-    RecyclerView.Adapter myAdapter;
+    MyRecyclerViewAdapter myAdapter;
 
     // edittext related
     EditText bookIDText;
@@ -103,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
         myRecyclerView = findViewById(R.id.recycleView);
         myLayoutManager = new LinearLayoutManager(this);
         myRecyclerView.setLayoutManager(myLayoutManager);
-        myAdapter = new MyRecyclerViewAdapter(myList);
+        myAdapter = new MyRecyclerViewAdapter();
         myRecyclerView.setAdapter(myAdapter);
 
         // initialize and bind the drawer layout
@@ -116,6 +121,15 @@ public class MainActivity extends AppCompatActivity {
         // initialize and bind navigation view
         NavigationView navigationView = findViewById(R.id.navigationView);
         navigationView.setNavigationItemSelectedListener(new MyNavigationListener()); // set the listener to listener object
+
+        //////////////////////////////////////////////////////////////////////////////////////////
+        // DATABASE                                                                             //
+        //////////////////////////////////////////////////////////////////////////////////////////
+        mBookViewModel = new ViewModelProvider(this).get(BookViewModel.class);
+        mBookViewModel.getAllBooks().observe(this, newData -> {
+            myAdapter.setMyList(newData);
+            myAdapter.notifyDataSetChanged();
+        });
     }
 
     @Override
@@ -216,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
         myEditor.apply(); // apply the changes
 
         // add the book to the listview
-        myList.add(new Book(title, Integer.toString(ISBN), author, description, Double.toString(price)));
+        mBookViewModel.insert(new Book(title, Integer.toString(ISBN), author, description, Double.toString(price)));
         myAdapter.notifyDataSetChanged();
     }
 
@@ -243,17 +257,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void removePrevious() {
-        myList.remove(myList.size() - 1);
+        mBookViewModel.deleteLastBook();
         myAdapter.notifyDataSetChanged();
     }
 
     private void removeAll() {
-        myList.clear();
+        mBookViewModel.deleteAll();
         myAdapter.notifyDataSetChanged();
     }
 
     private void totalBooks() {
-        Toast myMessage = Toast.makeText(this, String.format("Total books is %s", myList.size()), Toast.LENGTH_LONG);
+        Toast myMessage = Toast.makeText(this, String.format("Total books is %s", mBookViewModel.getAllBooks().getValue().size()), Toast.LENGTH_LONG);
         myMessage.show(); // actually displaying the message
     }
 
