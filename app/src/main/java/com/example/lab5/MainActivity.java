@@ -104,13 +104,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // initialize and bind recycle view
-        myRecyclerView = findViewById(R.id.recycleView);
-        myLayoutManager = new LinearLayoutManager(this);
-        myRecyclerView.setLayoutManager(myLayoutManager);
-        myAdapter = new MyRecyclerViewAdapter();
-        myRecyclerView.setAdapter(myAdapter);
-
         // initialize and bind the drawer layout
         drawerLayout = findViewById(R.id.drawerLayout);
         // create the action bar toggle icon
@@ -122,9 +115,13 @@ public class MainActivity extends AppCompatActivity {
         NavigationView navigationView = findViewById(R.id.navigationView);
         navigationView.setNavigationItemSelectedListener(new MyNavigationListener()); // set the listener to listener object
 
+        // put the recycle view fragment into the frame layout
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame1, new RecycleViewFragment()).commit();
+
         //////////////////////////////////////////////////////////////////////////////////////////
         // DATABASE                                                                             //
         //////////////////////////////////////////////////////////////////////////////////////////
+        myAdapter = new MyRecyclerViewAdapter();
         mBookViewModel = new ViewModelProvider(this).get(BookViewModel.class);
         mBookViewModel.getAllBooks().observe(this, newData -> {
             myAdapter.setMyList(newData);
@@ -271,6 +268,10 @@ public class MainActivity extends AppCompatActivity {
         myMessage.show(); // actually displaying the message
     }
 
+    private void listAll() {
+        startActivity(new Intent(getApplicationContext(), MainActivity2.class));
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // BROADCAST RECEIVER                                                                        //
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -323,6 +324,8 @@ public class MainActivity extends AppCompatActivity {
                 removeAll();
             } else if (id == R.id.close) {
                 finish();
+            } else if (id == R.id.listAll) {
+                listAll();
             }
             drawerLayout.closeDrawers();
             return true;

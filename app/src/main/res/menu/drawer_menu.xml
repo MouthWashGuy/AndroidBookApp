@@ -13,4 +13,7 @@
     <item
         android:id="@+id/close"
         android:title="Close" />
+    <item
+        android:id="@+id/listAll"
+        android:title="List All" />
 </menu>
