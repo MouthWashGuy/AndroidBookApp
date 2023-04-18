@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     //////////////////////////////////////////////////////////////////////////////////////////////
 
     // Recycle view related
-    List<String> myList = new ArrayList<>();
+    List<Book> myList = new ArrayList<>();
     RecyclerView myRecyclerView;
     RecyclerView.LayoutManager myLayoutManager;
     RecyclerView.Adapter myAdapter;
@@ -216,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
         myEditor.apply(); // apply the changes
 
         // add the book to the listview
-        myList.add(String.format("ID: %s|Title: %s|ISBN: %d|Author: %s|DESC: %s|Price: %.2f", bookId, title, ISBN, author, description, price));
+        myList.add(new Book(title, Integer.toString(ISBN), author, description, Double.toString(price)));
         myAdapter.notifyDataSetChanged();
     }
 

@@ -15,9 +15,9 @@ import java.util.StringTokenizer;
 
 public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.ViewHolder> {
 
-    private List<String> myList;
+    private List<Book> myList;
 
-    public MyRecyclerViewAdapter(List<String> data) {
+    public MyRecyclerViewAdapter(List<Book> data) {
         myList = data;
     }
 
@@ -32,13 +32,13 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     @Override
     public void onBindViewHolder(@NonNull MyRecyclerViewAdapter.ViewHolder holder, int position) {
 
-        StringTokenizer myTokenizer = new StringTokenizer(myList.get(position), "|");
-        holder.bookIDView.setText(myTokenizer.nextToken());
-        holder.titleView.setText(myTokenizer.nextToken());
-        holder.ISBNView.setText(myTokenizer.nextToken());
-        holder.authorView.setText(myTokenizer.nextToken());
-        holder.descriptionView.setText(myTokenizer.nextToken());
-        holder.priceView.setText(myTokenizer.nextToken());
+        Book book = myList.get(position);
+        holder.bookIDView.setText(Integer.toString(position));
+        holder.titleView.setText(book.getTitle());
+        holder.ISBNView.setText(book.getISBN());
+        holder.authorView.setText(book.getAuthor());
+        holder.descriptionView.setText(book.getDescription());
+        holder.priceView.setText(book.getPrice());
 
         final int fPosition = position;
         holder.itemView.setOnClickListener(new View.OnClickListener() {
