@@ -16,4 +16,7 @@
     <item
         android:id="@+id/listAll"
         android:title="List All" />
+    <item
+        android:id="@+id/deleteUnknown"
+        android:title="Delete Unknown" />
 </menu>

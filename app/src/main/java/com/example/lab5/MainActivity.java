@@ -272,6 +272,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(getApplicationContext(), MainActivity2.class));
     }
 
+    private void deleteUnknown() {
+        mBookViewModel.deleteUnknown();
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // BROADCAST RECEIVER                                                                        //
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -326,6 +330,8 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             } else if (id == R.id.listAll) {
                 listAll();
+            } else if (id == R.id.deleteUnknown) {
+                deleteUnknown();
             }
             drawerLayout.closeDrawers();
             return true;

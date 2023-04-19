@@ -27,4 +27,7 @@ public interface BookDao {
 
     @Query("delete from books where bookId = (SELECT Max(bookId) FROM books)")
     void deleteLastBook();
+
+    @Query("delete FROM books where bookAuthor like '%unknown%'")
+    void deleteUnknown();
 }

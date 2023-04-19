@@ -34,4 +34,10 @@ public class BookRepository {
             mBookDao.deleteLastBook();
         });
     }
+
+    void deleteUnknown(){
+        BookDatabase.databaseWriteExecutor.execute(()->{
+            mBookDao.deleteUnknown();
+        });
+    }
 }
