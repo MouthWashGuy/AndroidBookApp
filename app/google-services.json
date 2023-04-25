@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "759997483387",
+    "firebase_url": "https://fit2081mobileapp-default-rtdb.firebaseio.com",
+    "project_id": "fit2081mobileapp",
+    "storage_bucket": "fit2081mobileapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:759997483387:android:746f9856d18a02fc0955de",
+        "android_client_info": {
+          "package_name": "com.example.lab5"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "759997483387-69q5rgntd08uviebdo386chrddjoa5ba.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrW_oSmabgCwmQGAyf64ohai58SffUeu4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "759997483387-69q5rgntd08uviebdo386chrddjoa5ba.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

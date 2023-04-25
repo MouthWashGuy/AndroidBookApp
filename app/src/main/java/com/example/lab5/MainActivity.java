@@ -27,6 +27,8 @@ import com.example.lab5.provider.Book;
 import com.example.lab5.provider.BookViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +39,10 @@ public class MainActivity extends AppCompatActivity {
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // INSTANCE VARS                                                                             //
     //////////////////////////////////////////////////////////////////////////////////////////////
+
+    // Firebase related
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference myRef;
 
     // DB related
     private BookViewModel mBookViewModel;
@@ -127,6 +133,11 @@ public class MainActivity extends AppCompatActivity {
             myAdapter.setMyList(newData);
             myAdapter.notifyDataSetChanged();
         });
+
+        // fire base related
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        myRef = firebaseDatabase.getReference("Books");
+
     }
 
     @Override
@@ -226,9 +237,14 @@ public class MainActivity extends AppCompatActivity {
 
         myEditor.apply(); // apply the changes
 
+        Book book = new Book(title, Integer.toString(ISBN), author, description, Double.toString(price));
+
         // add the book to the listview
-        mBookViewModel.insert(new Book(title, Integer.toString(ISBN), author, description, Double.toString(price)));
+        mBookViewModel.insert(book);
         myAdapter.notifyDataSetChanged();
+
+        // add the book to firebase
+        myRef.push().setValue(book);
     }
 
     public void clearFields() { // simple method calling clear on the edit text objects text attribute
@@ -261,6 +277,9 @@ public class MainActivity extends AppCompatActivity {
     private void removeAll() {
         mBookViewModel.deleteAll();
         myAdapter.notifyDataSetChanged();
+
+        // delete all firebase books
+        myRef.removeValue();
     }
 
     private void totalBooks() {
