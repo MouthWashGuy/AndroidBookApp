@@ -19,6 +19,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -62,6 +63,11 @@ public class MainActivity extends AppCompatActivity {
 
     // drawer / navigation view related
     DrawerLayout drawerLayout;
+
+    // gesture/motion related
+    View myFrame;
+    int xdown;
+    int ydown;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // ANDROID LIFECYCLE STATES                                                                  //
@@ -138,6 +144,57 @@ public class MainActivity extends AppCompatActivity {
         firebaseDatabase = FirebaseDatabase.getInstance();
         myRef = firebaseDatabase.getReference("Books");
 
+        //////////////////////////////////////////////////////////////////////////////////////////
+        // GESTURE                                                                             //
+        ////////////////////////////////////////////////////////////////////////////////////////
+        myFrame = findViewById(R.id.touchZone);
+
+//        myFrame.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                ;
+//            }
+//        });
+
+        myFrame.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                int action = event.getActionMasked();
+
+                switch(action) {
+                    case MotionEvent.ACTION_DOWN:
+                        xdown = (int) event.getX();
+                        ydown = (int) event.getY();
+                        return true;
+                    case MotionEvent.ACTION_MOVE:
+                        return true;
+                    case MotionEvent.ACTION_UP:
+
+                        // tolerence check for x coord gestures
+                        if (Math.abs(ydown - event.getY()) < 40) {
+                            if (xdown - event.getX() < 0) {
+                                Double currPrice = priceText.getText().toString().equals("") ? 0.0 : Double.parseDouble(priceText.getText().toString());
+                                currPrice += 1;
+                                priceText.setText(Double.toString(currPrice));
+                            } else if  (xdown - event.getX() > 0){
+                                addBook();
+                            }
+                        }
+
+                        // tolerence check for y coord gestures
+                        if (Math.abs(xdown - event.getX()) < 40) {
+                            if (ydown - event.getY() < 0) {
+                               clearFields();
+                            }
+                        }
+
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
     }
 
     @Override
