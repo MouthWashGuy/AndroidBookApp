@@ -180,13 +180,18 @@ public class MainActivity extends AppCompatActivity {
                             } else if  (xdown - event.getX() > 0){
                                 addBook();
                             }
+                        } else if (Math.abs(xdown - event.getX()) < 40) {
+                            if (ydown - event.getY() > 0) {
+                                clearFields();
+                            } else if (ydown - event.getY() < 0) {
+                                finish();
+                            }
                         }
 
-                        // tolerence check for y coord gestures
-                        if (Math.abs(xdown - event.getX()) < 40) {
-                            if (ydown - event.getY() < 0) {
-                               clearFields();
-                            }
+                        if (xdown < 50 && ydown < 50) {
+                            String input = authorText.getText().toString();
+                            String output = input.toUpperCase();
+                            authorText.setText(output);
                         }
 
                         return true;
