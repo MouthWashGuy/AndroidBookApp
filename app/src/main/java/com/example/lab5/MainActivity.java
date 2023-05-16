@@ -17,6 +17,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -130,6 +131,9 @@ public class MainActivity extends AppCompatActivity {
         // put the recycle view fragment into the frame layout
         getSupportFragmentManager().beginTransaction().replace(R.id.frame1, new RecycleViewFragment()).commit();
 
+        // gesture detector
+        GestureDetector gestureDetector;
+
         //////////////////////////////////////////////////////////////////////////////////////////
         // DATABASE                                                                             //
         //////////////////////////////////////////////////////////////////////////////////////////
@@ -148,56 +152,13 @@ public class MainActivity extends AppCompatActivity {
         // GESTURE                                                                             //
         ////////////////////////////////////////////////////////////////////////////////////////
         myFrame = findViewById(R.id.touchZone);
-
-//        myFrame.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                ;
-//            }
-//        });
+        gestureDetector = new GestureDetector(this, new MyGestureDetector());
 
         myFrame.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-
-                int action = event.getActionMasked();
-
-                switch(action) {
-                    case MotionEvent.ACTION_DOWN:
-                        xdown = (int) event.getX();
-                        ydown = (int) event.getY();
-                        return true;
-                    case MotionEvent.ACTION_MOVE:
-                        return true;
-                    case MotionEvent.ACTION_UP:
-
-                        // tolerence check for x coord gestures
-                        if (Math.abs(ydown - event.getY()) < 40) {
-                            if (xdown - event.getX() < 0) {
-                                Double currPrice = priceText.getText().toString().equals("") ? 0.0 : Double.parseDouble(priceText.getText().toString());
-                                currPrice += 1;
-                                priceText.setText(Double.toString(currPrice));
-                            } else if  (xdown - event.getX() > 0){
-                                addBook();
-                            }
-                        } else if (Math.abs(xdown - event.getX()) < 40) {
-                            if (ydown - event.getY() > 0) {
-                                clearFields();
-                            } else if (ydown - event.getY() < 0) {
-                                finish();
-                            }
-                        }
-
-                        if (xdown < 50 && ydown < 50) {
-                            String input = authorText.getText().toString();
-                            String output = input.toUpperCase();
-                            authorText.setText(output);
-                        }
-
-                        return true;
-                    default:
-                        return false;
-                }
+                gestureDetector.onTouchEvent(event);
+                return true;
             }
         });
     }
@@ -416,6 +377,53 @@ public class MainActivity extends AppCompatActivity {
             }
             drawerLayout.closeDrawers();
             return true;
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    // GESTURE DETECTOR                                                                          //
+    //////////////////////////////////////////////////////////////////////////////////////////////
+
+    class MyGestureDetector extends GestureDetector.SimpleOnGestureListener {
+
+        @Override
+        public boolean onSingleTapUp(@NonNull MotionEvent e) {
+            ISBNText.setText(RandomString.generateNewRandomString(5));
+            return super.onSingleTapUp(e);
+        }
+
+        @Override
+        public boolean onScroll(@NonNull MotionEvent e1, @NonNull MotionEvent e2, float distanceX, float distanceY) {
+
+            if (e1.getX() > e2.getX()) {
+                Double price = Double.parseDouble(priceText.getText().toString());
+                priceText.setText(Double.toString(price + distanceX));
+            } else {
+                Double price = Double.parseDouble(priceText.getText().toString());
+                priceText.setText(Double.toString(price - distanceX));
+            }
+
+            return super.onScroll(e1, e2, distanceX, distanceY);
+        }
+
+        @Override
+        public boolean onFling(@NonNull MotionEvent e1, @NonNull MotionEvent e2, float velocityX, float velocityY) {
+            if (velocityX > 1000) {
+                moveTaskToBack(true);
+            }
+            return super.onFling(e1, e2, velocityX, velocityY);
+        }
+
+        @Override
+        public boolean onDoubleTap(@NonNull MotionEvent e) {
+            clearFields();
+            return super.onDoubleTap(e);
+        }
+
+        @Override
+        public void onLongPress(@NonNull MotionEvent e) {
+            loadBook();
+            super.onLongPress(e);
         }
     }
 }
