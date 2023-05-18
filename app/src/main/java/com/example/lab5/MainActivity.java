@@ -411,6 +411,10 @@ public class MainActivity extends AppCompatActivity {
             if (velocityX > 1000) {
                 moveTaskToBack(true);
             }
+
+            if (velocityY > 1000) {
+                titleText.setText("untitled");
+            }
             return super.onFling(e1, e2, velocityX, velocityY);
         }
 
@@ -425,5 +429,7 @@ public class MainActivity extends AppCompatActivity {
             loadBook();
             super.onLongPress(e);
         }
+
+
     }
 }
